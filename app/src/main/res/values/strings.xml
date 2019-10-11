@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Stox</string>
+
+    <string name="stocks">Stocks</string>
+    <string name="favorites">Favorites</string>
+    <string name="settings">Settings</string>
 </resources>

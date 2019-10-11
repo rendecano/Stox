@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main_graph"
+    app:startDestination="@id/stocksListFragment">
+
+    <fragment
+        android:id="@+id/stocksListFragment"
+        android:name="io.rendecano.stox.list.presentation.ui.StocksListFragment"
+        android:label="StocksListFragment">
+        <action
+            android:id="@+id/action_stocksListFragment_to_stockDetailsActivity"
+            app:destination="@id/stockDetailsActivity"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteStocksListFragment"
+        android:name="io.rendecano.stox.favorites.FavoriteStocksListFragment"
+        android:label="FavoriteStocksListFragment">
+        <action
+            android:id="@+id/action_favoriteStocksListFragment_to_stockDetailsActivity"
+            app:destination="@id/stockDetailsActivity"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="io.rendecano.stox.setting.SettingsFragment"
+        android:label="SettingsFragment" />
+    <activity
+        android:id="@+id/stockDetailsActivity"
+        android:name="io.rendecano.stox.detail.StockDetailsActivity"
+        android:label="StockDetailsActivity" />
+</navigation>
