@@ -1,43 +1,39 @@
 package io.rendecano.stox.list.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.rendecano.stox.common.presentation.viewmodel.BaseAction
+import androidx.lifecycle.liveData
 import io.rendecano.stox.common.presentation.viewmodel.SingleLiveEvent
+import io.rendecano.stox.list.domain.interactor.GetStockInfoUseCase
 import io.rendecano.stox.list.domain.interactor.GetStockListUseCase
 import io.rendecano.stox.list.domain.model.Stock
-import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class StocksListViewModel @Inject constructor(private val getStockListUseCase: GetStockListUseCase) : ViewModel() {
+class StocksListViewModel @Inject constructor(private val getStockListUseCase: GetStockListUseCase, private val getStockInfoUseCase: GetStockInfoUseCase) : ViewModel() {
 
     val loading = SingleLiveEvent<Boolean>()
     val error = SingleLiveEvent<Any>()
-    val stockList = SingleLiveEvent<List<Stock>>()
 
-    fun action(action: GetStockListAction) = actor.offer(action)
+    var stockList: LiveData<List<Stock>> = liveData {
+        emit(getStockListUseCase.execute().value ?: listOf())
 
-    private val actor =
-            GlobalScope.actor<GetStockListAction>(
-                    Dispatchers.Main,
-                    Channel.CONFLATED,
-                    CoroutineStart.DEFAULT,
-                    null,
-                    {
+        getStockListUseCase.execute().value?.forEach {
+            loadStock(it.symbol)
+            emit(getStockListUseCase.execute().value ?: listOf())
+        }
+    }
 
-                        for (action in this) when (action) {
-                            is GetStockListAction.Init -> {
-                                loading.value = true
-                                stockList.value = getStockListUseCase.execute()
-                                loading.value = false
-                            }
-                        }
-                    })
+    suspend fun loadStock(symbol: String): Stock = withContext(Dispatchers.IO) {
+        val deferred = CompletableDeferred<Stock>()
+        val stock = withContext(Dispatchers.IO) {
+            getStockInfoUseCase.symbol = symbol
+            getStockInfoUseCase.execute().value
+        } ?: Stock()
 
-    sealed class GetStockListAction : BaseAction {
-        object Init : GetStockListAction()
+        deferred.complete(stock)
+        deferred.await()
     }
 }

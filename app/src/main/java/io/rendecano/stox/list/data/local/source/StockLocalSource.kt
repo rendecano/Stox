@@ -1,5 +1,6 @@
 package io.rendecano.stox.list.data.local.source
 
+import androidx.paging.PagedList
 import io.rendecano.stox.list.data.local.model.StockEntity
 
 interface StockLocalSource {
@@ -8,4 +9,7 @@ interface StockLocalSource {
 
     suspend fun retrieveStockList(): List<StockEntity>
 
+    suspend fun getStock(symbol: String): StockEntity
+
+    suspend fun updateStock(stockEntity: StockEntity)
 }

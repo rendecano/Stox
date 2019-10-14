@@ -14,6 +14,4 @@ class StockRemoteDataSource @Inject constructor(retrofit: Retrofit) : StockRemot
     override suspend fun getStockList(): List<Symbols> = stockServiceApi.getStockList().symbolsList
 
     override suspend fun getCompanyProfile(symbol: String): CompanyProfile = stockServiceApi.getCompanyInformation(symbol)
-
-    override suspend fun getCompanyProfiles(symbols: String): List<CompanyProfile> = stockServiceApi.getCompanyInformationByBatch(symbols).companyProfiles
 }

@@ -13,7 +13,4 @@ interface StockServiceApi {
 
     @GET("api/v3/company/profile/{symbol}")
     suspend fun getCompanyInformation(@Path("symbol") symbol: String): CompanyProfile
-
-    @GET("api/v3/company/profile/{symbol}")
-    suspend fun getCompanyInformationByBatch(@Path("symbol") symbol: String): CompanyProfileList
 }

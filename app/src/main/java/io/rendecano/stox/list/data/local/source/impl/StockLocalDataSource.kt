@@ -11,5 +11,12 @@ class StockLocalDataSource @Inject constructor(private val database: AppDatabase
     override suspend fun saveStockList(stockEntityList: List<StockEntity>) =
             database.stockDao().insertAll(stockEntityList)
 
-    override suspend fun retrieveStockList(): List<StockEntity> = database.stockDao().getStocks()
+    override suspend fun retrieveStockList(): List<StockEntity> =
+            database.stockDao().getStocks()
+
+    override suspend fun getStock(symbol: String): StockEntity =
+            database.stockDao().getStock(symbol)
+
+    override suspend fun updateStock(stockEntity: StockEntity) =
+            database.stockDao().updateStock(stockEntity)
 }
