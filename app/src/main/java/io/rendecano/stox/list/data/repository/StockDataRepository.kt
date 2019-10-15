@@ -2,7 +2,9 @@ package io.rendecano.stox.list.data.repository
 
 import io.rendecano.stox.list.data.local.model.StockEntity
 import io.rendecano.stox.list.data.local.source.StockLocalSource
+import io.rendecano.stox.list.data.remote.model.CompanyProfile
 import io.rendecano.stox.list.data.remote.source.StockRemoteSource
+import io.rendecano.stox.list.domain.model.Status
 import io.rendecano.stox.list.domain.model.Stock
 import io.rendecano.stox.list.domain.repository.StockRepository
 import javax.inject.Inject
@@ -22,48 +24,18 @@ class StockDataRepository @Inject constructor(
             val result = stockRemoteSource.getCompanyProfile(symbol)
 
             // save to local storage
-            stockLocalSource.updateStock(StockEntity(result.symbol,
-                    result.profile.companyName,
-                    result.profile.price,
-                    result.profile.image,
-                    result.profile.lastDiv,
-                    result.profile.changes,
-                    result.profile.changesPercentage,
-                    result.profile.industry,
-                    result.profile.sector))
+            stockLocalSource.updateStock(result.toEntity())
         }
         val it = stockLocalSource.getStock(symbol)
-        return Stock(it.name,
-                it.price,
-                it.symbol,
-                it.imageUrl,
-                it.lastDividend,
-                it.priceChange,
-                it.changesPercentage,
-                it.industry,
-                it.sector)
-
-
-//        return stockLocalSource.retrieveStockList().map {
-//            Stock(it.name,
-//                    it.price,
-//                    it.symbol,
-//                    it.imageUrl,
-//                    it.lastDividend,
-//                    it.priceChange,
-//                    it.changesPercentage,
-//                    it.industry,
-//                    it.sector)
-//        }
+        return it.toStock()
     }
-
 
     override suspend fun getStockList(): List<Stock> {
 
-        // Implement cache timeout
+        //TODO: Implement cache timeout
         val cachedData = stockLocalSource.retrieveStockList()
         if (cachedData.isEmpty()) {
-            val remoteList = stockRemoteSource.getStockList().take(1000)
+            val remoteList = stockRemoteSource.getStockList().take(50)
                     .map {
                         Stock(it.name,
                                 it.price,
@@ -71,58 +43,68 @@ class StockDataRepository @Inject constructor(
                     }
 
             stockLocalSource.saveStockList(remoteList
-                    .map {
-                        StockEntity(it.symbol,
-                                it.name,
-                                it.price,
-                                it.imageUrl,
-                                it.lastDividend,
-                                it.priceChange,
-                                it.changesPercentage,
-                                it.industry,
-                                it.sector,
-                                it.isFavorite)
-                    })
+                    .map { it.toEntity() })
         }
 
-        return stockLocalSource.retrieveStockList().map {
-            Stock(it.name,
-                    it.price,
-                    it.symbol,
-                    it.imageUrl,
-                    it.lastDividend,
-                    it.priceChange,
-                    it.changesPercentage,
-                    it.industry,
-                    it.sector)
-        }
+        return stockLocalSource.retrieveStockList()
+                .map { it.toStock() }
     }
 
     override suspend fun saveStockList(stockList: List<Stock>) =
             stockLocalSource.saveStockList(stockList
-                    .map {
-                        StockEntity(it.symbol,
-                                it.name,
-                                it.price,
-                                it.imageUrl,
-                                it.lastDividend,
-                                it.priceChange,
-                                it.changesPercentage,
-                                it.industry,
-                                it.sector,
-                                it.isFavorite)
+                    .map { it.toEntity() })
+
+    override suspend fun updateStock(stock: Stock) =
+            stockLocalSource.updateStock(stock.toEntity())
+
+    override suspend fun getFavoriteStockList(): List<Stock> = stockLocalSource.retrieveFavoriteStockList()
+            .map { it.toStock() }
+
+    private fun StockEntity.toStock(): Stock =
+            Stock(this.name,
+                    this.price,
+                    this.symbol,
+                    this.imageUrl,
+                    this.lastDividend,
+                    this.priceChange,
+                    this.changesPercentage,
+                    this.industry,
+                    this.sector,
+                    when (this.status) {
+                        1 -> Status.GAIN
+                        2 -> Status.LOSS
+                        else -> Status.NO_CHANGE
+                    },
+                    this.isFavorite)
+
+    private fun Stock.toEntity(): StockEntity =
+            StockEntity(this.symbol,
+                    this.name,
+                    this.price,
+                    this.imageUrl,
+                    this.lastDividend,
+                    this.priceChange,
+                    this.changesPercentage,
+                    this.industry,
+                    this.sector,
+                    this.isFavorite,
+                    when (this.status) {
+                        Status.GAIN -> 1
+                        Status.LOSS -> 2
+                        else -> 0
                     })
 
-    override suspend fun updateStock(stock: Stock) {
-        stockLocalSource.updateStock(StockEntity(stock.symbol,
-                stock.name,
-                stock.price,
-                stock.imageUrl,
-                stock.lastDividend,
-                stock.priceChange,
-                stock.changesPercentage,
-                stock.industry,
-                stock.sector,
-                stock.isFavorite))
-    }
+    private fun CompanyProfile.toEntity(): StockEntity =
+            StockEntity(this.symbol,
+                    this.profile.companyName,
+                    this.profile.price,
+                    this.profile.image,
+                    this.profile.lastDiv,
+                    this.profile.changes,
+                    this.profile.changesPercentage,
+                    this.profile.industry,
+                    this.profile.sector,
+                    false,
+                    0)
+
 }

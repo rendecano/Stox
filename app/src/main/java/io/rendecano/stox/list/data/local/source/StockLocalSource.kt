@@ -12,4 +12,6 @@ interface StockLocalSource {
     suspend fun getStock(symbol: String): StockEntity
 
     suspend fun updateStock(stockEntity: StockEntity)
+
+    suspend fun retrieveFavoriteStockList(): List<StockEntity>
 }

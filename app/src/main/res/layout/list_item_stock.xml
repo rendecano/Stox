@@ -6,14 +6,12 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="io.rendecano.stox.list.presentation.viewmodel.StocksListViewModel" />
-
-        <variable
             name="stock"
             type="io.rendecano.stox.list.domain.model.Stock" />
 
-        <import type="io.rendecano.stox.list.domain.model.Status"/>
+        <import type="io.rendecano.stox.list.domain.model.Status" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,26 +80,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/grid_8"
-            android:background="@{(stock.status == Status.GAIN) ? @color/green : @color/red}"
+            android:background="@{stock.status == Status.GAIN ? @color/green : @color/red}"
             android:fontFamily="@font/hurme"
             android:padding="@dimen/grid_4"
             android:text="@{stock.changesPercentage}"
             android:textColor="@color/colorTextInverse"
             android:textSize="@dimen/txt_size_18"
+            android:visibility="@{stock.changesPercentage.length() > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imgFavorite"
+            app:layout_constraintEnd_toStartOf="@+id/button_favorite"
             app:layout_constraintStart_toEndOf="@id/layoutInfo"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="(+0.06%)" />
 
-        <ImageView
-            android:id="@+id/imgFavorite"
+        <androidx.appcompat.widget.AppCompatToggleButton
+            android:id="@+id/button_favorite"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_favorite"
+            android:visibility="@{stock.changesPercentage.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:background="@drawable/btn_favorite"
+            android:backgroundTint="@color/colorAccent"
+            android:checked="@{stock.favorite}"
+            android:text=""
+            android:textOff=""
+            android:textOn=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtPercentChange"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

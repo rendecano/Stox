@@ -7,6 +7,12 @@
         <variable
             name="viewModel"
             type="io.rendecano.stox.list.presentation.viewmodel.StocksListViewModel" />
+
+        <variable
+            name="loading"
+            type="Boolean" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,6 +58,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/viewLoadingAnimation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/grid_16"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_enableMergePathsForKitKatAndAbove="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/deadpool" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

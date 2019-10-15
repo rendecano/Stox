@@ -14,5 +14,6 @@ data class StockEntity(
     var changesPercentage: String = "",
     var industry: String = "",
     var sector: String = "",
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    var status: Int = 0
 )

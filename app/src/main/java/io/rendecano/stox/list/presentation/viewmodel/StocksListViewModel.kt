@@ -6,34 +6,42 @@ import androidx.lifecycle.liveData
 import io.rendecano.stox.common.presentation.viewmodel.SingleLiveEvent
 import io.rendecano.stox.list.domain.interactor.GetStockInfoUseCase
 import io.rendecano.stox.list.domain.interactor.GetStockListUseCase
+import io.rendecano.stox.list.domain.interactor.SetStockFavoriteUseCase
 import io.rendecano.stox.list.domain.model.Stock
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class StocksListViewModel @Inject constructor(private val getStockListUseCase: GetStockListUseCase, private val getStockInfoUseCase: GetStockInfoUseCase) : ViewModel() {
+class StocksListViewModel @Inject constructor(private val getStockListUseCase: GetStockListUseCase,
+                                              private val getStockInfoUseCase: GetStockInfoUseCase,
+                                              private val setStockFavoriteUseCase: SetStockFavoriteUseCase) : ViewModel() {
 
     val loading = SingleLiveEvent<Boolean>()
     val error = SingleLiveEvent<Any>()
 
-    var stockList: LiveData<List<Stock>> = liveData {
-        emit(getStockListUseCase.execute().value ?: listOf())
+    val stockList: LiveData<List<Stock>> = liveData {
+        val stockList = getStockListUseCase.execute().value
+        emit(stockList ?: listOf())
 
-        getStockListUseCase.execute().value?.forEach {
+        stockList?.forEach {
             loadStock(it.symbol)
             emit(getStockListUseCase.execute().value ?: listOf())
         }
     }
 
-    suspend fun loadStock(symbol: String): Stock = withContext(Dispatchers.IO) {
-        val deferred = CompletableDeferred<Stock>()
-        val stock = withContext(Dispatchers.IO) {
-            getStockInfoUseCase.symbol = symbol
-            getStockInfoUseCase.execute().value
-        } ?: Stock()
+    fun updateFavorite(symbol: String, isFavorite: Boolean): LiveData<List<Stock>> = liveData {
+        updateStock(symbol, isFavorite)
+        emit(getStockListUseCase.execute().value ?: listOf())
+    }
 
-        deferred.complete(stock)
-        deferred.await()
+    private suspend fun loadStock(symbol: String) = withContext(Dispatchers.IO) {
+        getStockInfoUseCase.symbol = symbol
+        getStockInfoUseCase.execute().value
+    }
+
+    private suspend fun updateStock(symbol: String, isFavorite: Boolean) = withContext(Dispatchers.IO) {
+        setStockFavoriteUseCase.isFavorite = isFavorite
+        setStockFavoriteUseCase.symbol = symbol
+        setStockFavoriteUseCase.execute()
     }
 }

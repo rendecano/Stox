@@ -7,18 +7,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.rendecano.stox.R
 import io.rendecano.stox.common.presentation.ui.BaseFragment
 import io.rendecano.stox.databinding.FragmentStocksListBinding
 import io.rendecano.stox.list.presentation.adapter.StockListAdapter
-import io.rendecano.stox.list.presentation.viewmodel.StocksListViewModel
+import io.rendecano.stox.list.presentation.viewmodel.FavoritesStocksListViewModel
 import kotlinx.android.synthetic.main.fragment_stocks_list.*
 
-class StocksListFragment : BaseFragment() {
+class FavoriteStocksListFragment : BaseFragment() {
 
-    private lateinit var viewModel: StocksListViewModel
+    private lateinit var viewModel: FavoritesStocksListViewModel
     private lateinit var mAdapter: StockListAdapter
     private lateinit var viewBinding: FragmentStocksListBinding
 
@@ -52,18 +51,18 @@ class StocksListFragment : BaseFragment() {
 
         mAdapter = StockListAdapter(this, favoriteListener)
         val mLayoutManager = LinearLayoutManager(activity)
-        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), VERTICAL))
+        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = mLayoutManager
         recyclerView.adapter = mAdapter
 
-        viewBinding.txtTitle.text = "Stocks List"
+        viewBinding.txtTitle.text = "Favorites"
     }
 
     private fun initModel() {
         viewBinding.loading = true
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(StocksListViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesStocksListViewModel::class.java)
 
-        viewModel.stockList.observe { list ->
+        viewModel.favoriteStockList.observe { list ->
             list.let {
 
                 viewBinding.loading = list?.isNullOrEmpty()

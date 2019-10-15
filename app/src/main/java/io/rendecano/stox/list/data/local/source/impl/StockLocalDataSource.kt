@@ -19,4 +19,7 @@ class StockLocalDataSource @Inject constructor(private val database: AppDatabase
 
     override suspend fun updateStock(stockEntity: StockEntity) =
             database.stockDao().updateStock(stockEntity)
+
+    override suspend fun retrieveFavoriteStockList(): List<StockEntity> =
+            database.stockDao().getFavoriteStocks()
 }

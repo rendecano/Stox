@@ -10,6 +10,9 @@ interface StockDao {
     @Query("Select * from StockEntity order by symbol ASC")
     fun getStocks(): List<StockEntity>
 
+    @Query("Select * from StockEntity where isFavorite = 1 order by symbol ASC")
+    fun getFavoriteStocks(): List<StockEntity>
+
     @Query("Select * from StockEntity where symbol = :symbol")
     fun getStock(symbol: String): StockEntity
 

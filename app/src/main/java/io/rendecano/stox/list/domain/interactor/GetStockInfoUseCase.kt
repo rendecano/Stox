@@ -15,15 +15,13 @@ class GetStockInfoUseCase @Inject constructor(private val stockRepository: Stock
             val data = MutableLiveData<Stock>()
 
             val stockProfile = stockRepository.getCompanyProfile(symbol)
-            var buraot = Stock()
-            when {
-                stockProfile.changesPercentage.contains("+") -> buraot = stockProfile.copy(status = Status.GAIN)
-                stockProfile.changesPercentage.contains("-") -> buraot = stockProfile.copy(status = Status.LOSS)
-                else ->  buraot = stockProfile.copy(status = Status.NO_CHANGE)
+            val buraot = when {
+                stockProfile.changesPercentage.contains("+") -> stockProfile.copy(status = Status.GAIN)
+                stockProfile.changesPercentage.contains("-") -> stockProfile.copy(status = Status.LOSS)
+                else -> stockProfile.copy(status = Status.NO_CHANGE)
             }
 
-            stockRepository.updateStock(stockProfile)
-
+            stockRepository.updateStock(buraot)
             data.postValue(buraot)
             data
 
