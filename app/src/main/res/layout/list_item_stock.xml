@@ -68,11 +68,11 @@
                     android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/hurme"
+                    android:fontFamily="@font/hurme_bold"
                     android:text="@{Double.toString(stock.price)}"
+                    android:textColor="@{stock.status == Status.GAIN ? @color/green : @color/red}"
                     tools:text="230.26" />
             </LinearLayout>
-
         </LinearLayout>
 
         <TextView
@@ -97,13 +97,13 @@
             android:id="@+id/button_favorite"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:visibility="@{stock.changesPercentage.length() > 0 ? View.VISIBLE : View.GONE}"
             android:background="@drawable/btn_favorite"
             android:backgroundTint="@color/colorAccent"
             android:checked="@{stock.favorite}"
             android:text=""
             android:textOff=""
             android:textOn=""
+            android:visibility="@{stock.changesPercentage.length() > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtPercentChange"

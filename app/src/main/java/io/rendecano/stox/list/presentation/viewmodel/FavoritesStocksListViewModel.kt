@@ -1,34 +1,62 @@
 package io.rendecano.stox.list.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import io.rendecano.stox.common.domain.model.Failure
 import io.rendecano.stox.common.presentation.viewmodel.SingleLiveEvent
 import io.rendecano.stox.list.domain.interactor.GetFavoriteStockListUseCase
+import io.rendecano.stox.list.domain.interactor.RefreshFavoriteStockListUseCase
 import io.rendecano.stox.list.domain.interactor.SetStockFavoriteUseCase
 import io.rendecano.stox.list.domain.model.Stock
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val REFRESH_TIME: Long = 15 * 1000
+
 class FavoritesStocksListViewModel @Inject constructor(private val getFavoriteStockListUseCase: GetFavoriteStockListUseCase,
-                                                       private val setStockFavoriteUseCase: SetStockFavoriteUseCase) : ViewModel() {
+                                                       private val setStockFavoriteUseCase: SetStockFavoriteUseCase,
+                                                       private val refreshFavoriteStockListUseCase: RefreshFavoriteStockListUseCase) : ViewModel() {
 
-    val loading = SingleLiveEvent<Boolean>()
-    val error = SingleLiveEvent<Any>()
+    val error = SingleLiveEvent<String>()
+    val favoriteStockList = MediatorLiveData<List<Stock>>()
 
-    val favoriteStockList: LiveData<List<Stock>> = liveData {
-        emit(getFavoriteStockListUseCase.execute().value ?: listOf())
+    private val tickerChannel = ticker(delayMillis = REFRESH_TIME, initialDelayMillis = 0)
+
+    fun getFavorites() {
+        getFavoriteStockListUseCase.invoke(viewModelScope, GetFavoriteStockListUseCase.Params()) { it.either(::handleFailure, ::handleSuccess) }
     }
 
-    fun updateFavorite(symbol: String, isFavorite: Boolean): LiveData<List<Stock>> = liveData {
-        updateStock(symbol, isFavorite)
-        emit(getFavoriteStockListUseCase.execute().value ?: listOf())
+    fun updateFavorite(symbol: String, isFavorite: Boolean) {
+        setStockFavoriteUseCase.invoke(viewModelScope, SetStockFavoriteUseCase.Params(symbol, isFavorite))
     }
 
-    private suspend fun updateStock(symbol: String, isFavorite: Boolean) = withContext(Dispatchers.IO) {
-        setStockFavoriteUseCase.isFavorite = isFavorite
-        setStockFavoriteUseCase.symbol = symbol
-        setStockFavoriteUseCase.execute()
+    private fun handleSuccess(list: LiveData<List<Stock>>) {
+        favoriteStockList.addSource(list) { result ->
+            result.let {
+                favoriteStockList.value = it
+            }
+        }
+
+        viewModelScope.launch {
+            startTimer()
+        }
+    }
+
+    private fun handleFailure(exception: Failure) {
+        error.value = exception.exception.message
+    }
+
+    private suspend fun startTimer() {
+        for (event in tickerChannel) {
+            refreshFavoriteStockListUseCase.invoke(viewModelScope, RefreshFavoriteStockListUseCase.Params())
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        tickerChannel.cancel()
     }
 }

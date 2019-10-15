@@ -1,5 +1,6 @@
 package io.rendecano.stox.list.data.local.source.impl
 
+import androidx.lifecycle.LiveData
 import io.rendecano.stox.common.data.local.AppDatabase
 import io.rendecano.stox.list.data.local.model.StockEntity
 import io.rendecano.stox.list.data.local.source.StockLocalSource
@@ -20,6 +21,13 @@ class StockLocalDataSource @Inject constructor(private val database: AppDatabase
     override suspend fun updateStock(stockEntity: StockEntity) =
             database.stockDao().updateStock(stockEntity)
 
-    override suspend fun retrieveFavoriteStockList(): List<StockEntity> =
+    override fun retrieveFavoriteStockList(): LiveData<List<StockEntity>> =
             database.stockDao().getFavoriteStocks()
+
+    override fun retrieveStocksList(): LiveData<List<StockEntity>> =
+            database.stockDao().getStocksList()
+
+    override fun retrieveFavoritesStockList(): List<StockEntity> =
+            database.stockDao().getFavoriteStocksList()
+
 }

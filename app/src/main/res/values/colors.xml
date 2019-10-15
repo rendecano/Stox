@@ -10,6 +10,7 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorText">#000000</color>
     <color name="colorTextInverse">#FFFFFF</color>
+    <color name="colorShimmer">#BAB9B9</color>
 
     <color name="green">#00E676</color>
     <color name="red">#FF3D00</color>

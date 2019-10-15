@@ -1,5 +1,7 @@
 package io.rendecano.stox.list.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import io.rendecano.stox.list.data.local.model.StockEntity
 import io.rendecano.stox.list.data.local.source.StockLocalSource
 import io.rendecano.stox.list.data.remote.model.CompanyProfile
@@ -14,40 +16,16 @@ class StockDataRepository @Inject constructor(
         private val stockRemoteSource: StockRemoteSource
 ) : StockRepository {
 
-    override suspend fun getCompanyProfile(symbol: String): Stock {
-
-        val cachedStock = stockLocalSource.getStock(symbol)
-
-        if (cachedStock.imageUrl.isEmpty()) {
-
-            // Fetch from network
-            val result = stockRemoteSource.getCompanyProfile(symbol)
-
-            // save to local storage
-            stockLocalSource.updateStock(result.toEntity())
-        }
-        val it = stockLocalSource.getStock(symbol)
-        return it.toStock()
-    }
-
-    override suspend fun getStockList(): List<Stock> {
+    override suspend fun getCompanyProfile(symbol: String, isForcedUpdate: Boolean): Stock {
 
         //TODO: Implement cache timeout
-        val cachedData = stockLocalSource.retrieveStockList()
-        if (cachedData.isEmpty()) {
-            val remoteList = stockRemoteSource.getStockList().take(50)
-                    .map {
-                        Stock(it.name,
-                                it.price,
-                                it.symbol)
-                    }
-
-            stockLocalSource.saveStockList(remoteList
-                    .map { it.toEntity() })
+        val cachedStock = stockLocalSource.getStock(symbol)
+        return if (cachedStock.imageUrl.isEmpty() or isForcedUpdate) {
+            stockRemoteSource.getCompanyProfile(symbol).toEntity().toStock()
+        } else {
+            cachedStock.toStock()
         }
 
-        return stockLocalSource.retrieveStockList()
-                .map { it.toStock() }
     }
 
     override suspend fun saveStockList(stockList: List<Stock>) =
@@ -57,8 +35,33 @@ class StockDataRepository @Inject constructor(
     override suspend fun updateStock(stock: Stock) =
             stockLocalSource.updateStock(stock.toEntity())
 
-    override suspend fun getFavoriteStockList(): List<Stock> = stockLocalSource.retrieveFavoriteStockList()
-            .map { it.toStock() }
+    override fun getFavoriteStockList(): LiveData<List<Stock>> =
+            Transformations.map(stockLocalSource.retrieveFavoriteStockList(), ::transform)
+
+    override fun getStocksList(): LiveData<List<Stock>> =
+            Transformations.map(stockLocalSource.retrieveStocksList(), ::transform)
+
+
+    override suspend fun downloadStockList(): List<Stock> {
+
+        //TODO: Implement cache timeout
+        val cachedData = stockLocalSource.retrieveStockList()
+        return if (cachedData.isEmpty()) {
+            stockRemoteSource.getStockList()
+                    .map {
+                        Stock(it.name,
+                                it.price,
+                                it.symbol)
+                    }
+        } else {
+            cachedData.map { it.toStock() }
+        }
+    }
+
+    override suspend fun getFavoriteStocksList(): List<Stock> =
+            stockLocalSource.retrieveFavoritesStockList().map { it.toStock() }
+
+    private fun transform(listEntity: List<StockEntity>) = listEntity.map { it.toStock() }
 
     private fun StockEntity.toStock(): Stock =
             Stock(this.name,

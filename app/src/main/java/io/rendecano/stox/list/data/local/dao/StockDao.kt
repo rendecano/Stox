@@ -1,5 +1,6 @@
 package io.rendecano.stox.list.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
 import io.rendecano.stox.list.data.local.model.StockEntity
@@ -7,11 +8,14 @@ import io.rendecano.stox.list.data.local.model.StockEntity
 @Dao
 interface StockDao {
 
-    @Query("Select * from StockEntity order by symbol ASC")
+    @Query("Select * from StockEntity")
     fun getStocks(): List<StockEntity>
 
-    @Query("Select * from StockEntity where isFavorite = 1 order by symbol ASC")
-    fun getFavoriteStocks(): List<StockEntity>
+    @Query("Select * from StockEntity where isFavorite = 1")
+    fun getFavoriteStocks(): LiveData<List<StockEntity>>
+
+    @Query("Select * from StockEntity where isFavorite = 1")
+    fun getFavoriteStocksList(): List<StockEntity>
 
     @Query("Select * from StockEntity where symbol = :symbol")
     fun getStock(symbol: String): StockEntity
@@ -21,4 +25,7 @@ interface StockDao {
 
     @Update
     fun updateStock(stockEntity: StockEntity)
+
+    @Query("Select * from StockEntity")
+    fun getStocksList(): LiveData<List<StockEntity>>
 }

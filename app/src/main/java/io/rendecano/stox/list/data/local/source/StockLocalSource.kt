@@ -1,5 +1,6 @@
 package io.rendecano.stox.list.data.local.source
 
+import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import io.rendecano.stox.list.data.local.model.StockEntity
 
@@ -13,5 +14,9 @@ interface StockLocalSource {
 
     suspend fun updateStock(stockEntity: StockEntity)
 
-    suspend fun retrieveFavoriteStockList(): List<StockEntity>
+    fun retrieveFavoriteStockList(): LiveData<List<StockEntity>>
+
+    fun retrieveStocksList(): LiveData<List<StockEntity>>
+
+    fun retrieveFavoritesStockList(): List<StockEntity>
 }

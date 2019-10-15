@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -24,12 +25,7 @@ class FavoriteStocksListFragment : BaseFragment() {
     private val favoriteListener by lazy {
         object : StockListAdapter.OnFavoriteListener {
             override fun onSelect(symbol: String, selected: Boolean) {
-                viewModel.updateFavorite(symbol, selected).observe { list ->
-                    list.let {
-                        mAdapter.setData(ArrayList(it ?: listOf()))
-                        mAdapter.notifyDataSetChanged()
-                    }
-                }
+                viewModel.updateFavorite(symbol, selected)
             }
         }
     }
@@ -72,17 +68,10 @@ class FavoriteStocksListFragment : BaseFragment() {
             }
         }
 
-//        viewModel.error.observe {
-//            // TODO: Show error message
-//        }
+        viewModel.getFavorites()
 
-        //        viewModel.loading.observe {
-//            // TODO: Show loading
-//            if (it == true) {
-//
-//            } else {
-//
-//            }
-//        }
+        viewModel.error.observe {
+            Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
+        }
     }
 }

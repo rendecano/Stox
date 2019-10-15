@@ -14,4 +14,4 @@ data class Stock(val name: String = "",
                  val industry: String = "",
                  val sector: String = "",
                  var status: Status = Status.NO_CHANGE,
-                 val isFavorite: Boolean = false)
+                 var isFavorite: Boolean = false)

@@ -52,6 +52,6 @@ class StockListAdapter(private val bindingLifecycleOwner: LifecycleOwner,
     private val asyncDiffUtil: AsyncDiffUtil<Stock> = AsyncDiffUtil(this, object : DiffUtil.ItemCallback<Stock>() {
         override fun areItemsTheSame(oldItem: Stock, newItem: Stock) = oldItem.symbol == newItem.symbol
 
-        override fun areContentsTheSame(oldItem: Stock, newItem: Stock): Boolean = oldItem.price === newItem.price
+        override fun areContentsTheSame(oldItem: Stock, newItem: Stock): Boolean = oldItem.price == newItem.price
     })
 }
