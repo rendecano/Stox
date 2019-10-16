@@ -44,11 +44,7 @@ Financial Modeling
 - Cache timeout validation
 
 # Challenges encountered
-API not optimised
-	- Pagination could have helped
-	- Other info could have been returned on the initial API to make it lightweight
-May introduce DOS attack
-	- Calling API more than 7000 times won't help the server
-Last-modified-header
-	-	
+- API not optimised, pagination could have helped
+- Other info could have been returned on the initial API to make it lightweight
+- May introduce DOS attack, calling API more than 7000 times won't help the server
 
