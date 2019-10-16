@@ -32,20 +32,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txtEmptyLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/hurme"
-            android:text="No stocks available"
-            android:textSize="@dimen/txt_size_24"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/viewLoadingAnimation"
             android:layout_width="match_parent"
@@ -59,7 +45,7 @@
             app:lottie_autoPlay="true"
             app:lottie_enableMergePathsForKitKatAndAbove="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/deadpool" />
+            app:lottie_rawRes="@raw/dino" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,49 +1,21 @@
 package io.rendecano.stox.common.domain.interactor
 
-import kotlinx.coroutines.*
+import io.rendecano.stox.common.domain.model.Either
+import io.rendecano.stox.common.domain.model.Failure
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
-abstract class BaseUseCase<T> {
+abstract class BaseUseCase<out Type, in Params> where Type : Any {
 
-    private val asyncJobs: MutableList<Job> = mutableListOf()
-    private val deferredObjects: MutableList<Deferred<*>> = mutableListOf()
+    abstract suspend fun run(params: Params?): Either<Failure, Type>
 
-    abstract suspend fun execute(): T
-
-    suspend fun <T> async(block: suspend CoroutineScope.() -> T): Deferred<T> {
-        val deferred: Deferred<T> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) { block() }
-        deferredObjects.add(deferred)
-        deferred.invokeOnCompletion { deferredObjects.remove(deferred) }
-        return deferred
-    }
-
-    suspend fun <T> asyncAwait(block: suspend CoroutineScope.() -> T): T {
-        return async(block).await()
-    }
-
-    suspend fun CoroutineScope.tryCatch(
-            tryBlock: suspend CoroutineScope.() -> Unit,
-            catchBlock: suspend CoroutineScope.(Throwable) -> Unit,
-            handleCancellationExceptionManually: Boolean = false) {
-        try {
-            tryBlock()
-        } catch (e: Throwable) {
-            if (e !is CancellationException ||
-                    handleCancellationExceptionManually) {
-                catchBlock(e)
-            } else {
-                throw e
-            }
-        }
-    }
-
-    fun cancelAllAsync() {
-
-        deferredObjects.forEach {
-            it.cancel()
-        }
-
-        asyncJobs.forEach {
-            it.cancel()
-        }
+    open operator fun invoke(
+            scope: CoroutineScope,
+            params: Params?,
+            onResult: (Either<Failure, Type>) -> Unit = {}
+    ) {
+        val backgroundJob = scope.async { run(params) }
+        scope.launch { onResult(backgroundJob.await()) }
     }
 }

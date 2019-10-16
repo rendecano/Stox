@@ -9,6 +9,7 @@
     <dimen name="grid_36">36dp</dimen>
     <dimen name="grid_40">40dp</dimen>
     <dimen name="grid_48">48dp</dimen>
+    <dimen name="grid_56">56dp</dimen>
 
     <dimen name="txt_size_48">48sp</dimen>
     <dimen name="txt_size_36">36sp</dimen>
@@ -21,13 +22,5 @@
     <dimen name="txt_size_14">14sp</dimen>
     <dimen name="txt_size_12">12sp</dimen>
     <dimen name="txt_size_10">10sp</dimen>
-
-    <dimen name="txt_size_title">56sp</dimen>
-    <dimen name="txt_size_screen_title">48sp</dimen>
-    <dimen name="txt_size_subtitle">16sp</dimen>
-    <dimen name="txt_size_normal">16sp</dimen>
-
-    <dimen name="btn_corner_radius">@dimen/grid_12</dimen>
-    <dimen name="card_corner_radius">@dimen/grid_8</dimen>
 
 </resources>

@@ -1,6 +1,6 @@
 package io.rendecano.stox.detail.domain.interactor
 
-import io.rendecano.stox.common.domain.interactor.BaseCoroutineUseCase
+import io.rendecano.stox.common.domain.interactor.BaseUseCase
 import io.rendecano.stox.common.domain.model.Either
 import io.rendecano.stox.common.domain.model.Failure
 import io.rendecano.stox.detail.domain.model.PriceRangeFilter
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DownloadStockPriceHistoryUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseCoroutineUseCase<Int, DownloadStockPriceHistoryUseCase.Params>() {
+class DownloadStockPriceHistoryUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseUseCase<Int, DownloadStockPriceHistoryUseCase.Params>() {
 
     override suspend fun run(params: Params?): Either<Failure, Int> {
         return try {

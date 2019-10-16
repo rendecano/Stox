@@ -12,7 +12,6 @@ import io.rendecano.stox.detail.domain.interactor.GetStockDetailsUseCase
 import io.rendecano.stox.detail.domain.interactor.GetStockPriceHistoryUseCase
 import io.rendecano.stox.detail.domain.interactor.RefreshRealtimePriceUseCase
 import io.rendecano.stox.detail.domain.model.PriceRangeFilter
-import io.rendecano.stox.list.domain.interactor.RefreshFavoriteRealtimePriceUseCase
 import io.rendecano.stox.list.domain.model.Stock
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.launch

@@ -1,6 +1,6 @@
 package io.rendecano.stox.list.domain.interactor
 
-import io.rendecano.stox.common.domain.interactor.BaseCoroutineUseCase
+import io.rendecano.stox.common.domain.interactor.BaseUseCase
 import io.rendecano.stox.common.domain.model.Either
 import io.rendecano.stox.common.domain.model.Failure
 import io.rendecano.stox.list.domain.repository.StockRepository
@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RefreshFavoriteRealtimePriceUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseCoroutineUseCase<Int, RefreshFavoriteRealtimePriceUseCase.Params>() {
+class RefreshFavoriteRealtimePriceUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseUseCase<Int, RefreshFavoriteRealtimePriceUseCase.Params>() {
 
     override suspend fun run(params: Params?): Either<Failure, Int> {
         return try {

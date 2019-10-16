@@ -1,17 +1,18 @@
 package io.rendecano.stox.detail.domain.interactor
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
-import io.rendecano.stox.common.domain.interactor.BaseCoroutineUseCase
+import io.rendecano.stox.common.domain.interactor.BaseUseCase
 import io.rendecano.stox.common.domain.model.Either
 import io.rendecano.stox.common.domain.model.Failure
 import io.rendecano.stox.detail.domain.model.PriceHistory
 import io.rendecano.stox.list.domain.repository.StockRepository
 import javax.inject.Inject
 
-class GetStockPriceHistoryUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseCoroutineUseCase<LiveData<LineDataSet>, GetStockPriceHistoryUseCase.Params>() {
+class GetStockPriceHistoryUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseUseCase<LiveData<LineDataSet>, GetStockPriceHistoryUseCase.Params>() {
 
     override suspend fun run(params: Params?): Either<Failure, LiveData<LineDataSet>> {
         return try {
@@ -29,7 +30,9 @@ class GetStockPriceHistoryUseCase @Inject constructor(private val stockRepositor
             valueList.add(Entry(count++.toFloat(), it.price.toFloat(), it.date))
         }
 
-        return LineDataSet(valueList, "HISTORY")
+        return LineDataSet(valueList, "PRICE HISTORY").apply {
+            color = Color.RED
+        }
     }
 
     data class Params(val symbol: String)

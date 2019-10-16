@@ -1,18 +1,39 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-<!-- Base application theme. -->
-<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-    <!-- Customize your theme here. -->
-    <!--        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>-->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-</style>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!--        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextView</item>
+    </style>
 
-<style name="BottomNavigationTheme" parent="Theme.MaterialComponents.DayNight">
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorOnSurface">@color/colorInactive</item>
-    <item name="android:fontFamily">@font/hurme</item>
-</style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:fontFamily">@font/hurme</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:fontFamily">@font/hurme</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="BottomNavigationTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnSurface">@color/colorInactive</item>
+        <item name="android:fontFamily">@font/hurme</item>
+    </style>
+
+    <style name="AppTheme.TextView" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">@font/hurme</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="AppTheme.TextView.Title" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">@font/hurme_bold</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
 
 </resources>

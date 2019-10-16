@@ -34,14 +34,13 @@
 
             <TextView
                 android:id="@+id/toolbar_title"
+                style="@style/AppTheme.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:fontFamily="@font/hurme_bold"
                 android:text="@{stock.name}"
                 android:textAllCaps="true"
-                android:textColor="@color/colorText"
                 android:textSize="@dimen/txt_size_18" />
 
         </androidx.appcompat.widget.Toolbar>
@@ -82,11 +81,10 @@
 
                 <TextView
                     android:id="@+id/txtSymbol"
+                    style="@style/AppTheme.TextView.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/hurme_bold"
                     android:text="@{stock.symbol}"
-                    android:textColor="@color/colorText"
                     android:textSize="@dimen/txt_size_28"
                     tools:text="AAPL" />
 
@@ -149,11 +147,11 @@
 
             <TextView
                 android:id="@+id/labelLastDividend"
+                style="@style/AppTheme.TextView.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_16"
-                android:fontFamily="@font/hurme_bold"
-                android:text="Last dividend"
+                android:text="@string/last_dividend"
                 android:textSize="@dimen/txt_size_18"
                 app:layout_constraintTop_toBottomOf="@+id/chart" />
 
@@ -170,11 +168,11 @@
 
             <TextView
                 android:id="@+id/labelSector"
+                style="@style/AppTheme.TextView.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_16"
-                android:fontFamily="@font/hurme_bold"
-                android:text="Sector"
+                android:text="@string/sector"
                 android:textSize="@dimen/txt_size_18"
                 app:layout_constraintTop_toBottomOf="@+id/txtLastDividend" />
 
@@ -191,11 +189,11 @@
 
             <TextView
                 android:id="@+id/labelIndustry"
+                style="@style/AppTheme.TextView.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_16"
-                android:fontFamily="@font/hurme_bold"
-                android:text="Industry"
+                android:text="@string/industry"
                 android:textSize="@dimen/txt_size_18"
                 app:layout_constraintTop_toBottomOf="@+id/txtSector" />
 

@@ -1,47 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:padding="@dimen/grid_16">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="116dp"
+        android:layout_height="116dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/grid_32"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtTitle"
+        android:id="@+id/txtThemeLabel"
+        style="@style/AppTheme.TextView"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:fontFamily="@font/hurme"
+        android:layout_height="@dimen/grid_56"
+        android:layout_marginTop="@dimen/grid_16"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/grid_16"
-        android:paddingEnd="@dimen/grid_16"
-        android:text="Settings"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/txt_size_32"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/dark_theme"
+        android:textSize="@dimen/txt_size_18"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/imgLogo" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingStart="@dimen/grid_16"
-        android:paddingEnd="@dimen/grid_16"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchDarkTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/grid_56"
+        android:layout_marginTop="@dimen/grid_16"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+        app:layout_constraintTop_toBottomOf="@id/imgLogo" />
 
     <TextView
-        android:id="@+id/txtEmptyLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/hurme"
-        android:text="No stocks available"
-        android:textSize="@dimen/txt_size_24"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/txtVersionLabel"
+        style="@style/AppTheme.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/grid_56"
+        android:layout_marginTop="@dimen/grid_16"
+        android:gravity="center_vertical"
+        android:text="@string/version_label"
+        android:textSize="@dimen/txt_size_18"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/txtThemeLabel" />
+
+    <TextView
+        android:id="@+id/txtVersion"
+        style="@style/AppTheme.TextView.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/grid_56"
+        android:layout_marginTop="@dimen/grid_16"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/txt_size_18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtThemeLabel"
+        tools:text="version 1.0.0-awesome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

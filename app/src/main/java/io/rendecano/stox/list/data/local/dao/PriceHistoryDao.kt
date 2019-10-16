@@ -3,7 +3,6 @@ package io.rendecano.stox.list.data.local.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.rendecano.stox.list.data.local.model.PriceHistoryEntity
-import io.rendecano.stox.list.data.local.model.StockEntity
 
 @Dao
 interface PriceHistoryDao {
@@ -16,4 +15,13 @@ interface PriceHistoryDao {
 
     @Query("Select * from PriceHistoryEntity where symbol = :symbol")
     fun getHistoricalPrice(symbol: String): LiveData<List<PriceHistoryEntity>>
+
+    @Query("Delete from PriceHistoryEntity")
+    fun deleteAllStore()
+
+    @Transaction
+    fun insertPriceHistoryList(priceHistoryEntityList: List<PriceHistoryEntity>) {
+        deleteAllStore()
+        insertAll(priceHistoryEntityList)
+    }
 }

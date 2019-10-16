@@ -1,11 +1,15 @@
 package io.rendecano.stox.common.presentation.ui
 
 import android.content.res.Resources
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import de.hdodenhof.circleimageview.CircleImageView
 import io.rendecano.stox.R
+
+const val SYMBOL = "symbol"
+const val THEME_PREF = "theme_pref"
 
 @BindingAdapter("stockImageUrl")
 fun CircleImageView.bindImageUrl(imageUrl: String?) {
@@ -25,4 +29,17 @@ fun CircleImageView.bindImageUrl(imageUrl: String?) {
     }
 }
 
-fun Int.stringify(res: Resources) : String = res.getString(this)
+fun Int.stringify(res: Resources): String = res.getString(this)
+
+object ThemeHelper {
+    fun applyDarkTheme(isDarkTheme: Boolean) {
+        when (isDarkTheme) {
+            true -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            else -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
+}

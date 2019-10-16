@@ -16,8 +16,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@color/colorBackground"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground">
 
         <LinearLayout
             android:id="@+id/layoutInfo"
@@ -35,8 +35,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgCompany"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="@dimen/grid_56"
+                android:layout_height="@dimen/grid_56"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher"
@@ -50,11 +50,10 @@
 
                 <TextView
                     android:id="@+id/txtSymbol"
+                    style="@style/AppTheme.TextView.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/hurme_bold"
                     android:text="@{stock.symbol}"
-                    android:textColor="@color/colorText"
                     android:textSize="@dimen/txt_size_18"
                     tools:text="AAPL" />
 
@@ -68,9 +67,9 @@
 
                 <TextView
                     android:id="@+id/txtPrice"
+                    style="@style/AppTheme.TextView.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/hurme_bold"
                     android:text="@{Double.toString(stock.price)}"
                     android:textColor="@{stock.status == Status.GAIN ? @color/green : @color/red}"
                     tools:text="230.26" />

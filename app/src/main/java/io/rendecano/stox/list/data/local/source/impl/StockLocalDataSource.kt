@@ -35,7 +35,7 @@ class StockLocalDataSource @Inject constructor(private val database: AppDatabase
             database.stockDao().getStockInfo(symbol)
 
     override suspend fun savePriceHistoryList(priceHistoryEntity: List<PriceHistoryEntity>) =
-            database.priceHistoryDao().insertAll(priceHistoryEntity)
+            database.priceHistoryDao().insertPriceHistoryList(priceHistoryEntity)
 
     override fun retrievePriceHistory(symbol: String): LiveData<List<PriceHistoryEntity>> =
             database.priceHistoryDao().getHistoricalPrice(symbol)

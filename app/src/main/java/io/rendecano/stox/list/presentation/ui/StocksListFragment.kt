@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.rendecano.stox.R
 import io.rendecano.stox.common.presentation.ui.BaseFragment
+import io.rendecano.stox.common.presentation.ui.SYMBOL
 import io.rendecano.stox.databinding.FragmentStocksListBinding
 import io.rendecano.stox.list.presentation.adapter.StockListAdapter
 import io.rendecano.stox.list.presentation.viewmodel.StocksListViewModel
-import kotlinx.android.synthetic.main.fragment_stocks_list.*
 
 class StocksListFragment : BaseFragment() {
 
@@ -37,7 +37,7 @@ class StocksListFragment : BaseFragment() {
             override fun onSelect(symbol: String) {
                 findNavController().navigate(
                         R.id.action_stocksListFragment_to_stockDetailsActivity,
-                        Bundle().apply { putString("SYMBOL", symbol) })
+                        Bundle().apply { putString(SYMBOL, symbol) })
             }
         }
     }
@@ -60,9 +60,9 @@ class StocksListFragment : BaseFragment() {
 
         mAdapter = StockListAdapter(this, favoriteListener, selectListener)
         val mLayoutManager = LinearLayoutManager(activity)
-        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), VERTICAL))
-        recyclerView.layoutManager = mLayoutManager
-        recyclerView.adapter = mAdapter
+        viewBinding.recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), VERTICAL))
+        viewBinding.recyclerView.layoutManager = mLayoutManager
+        viewBinding.recyclerView.adapter = mAdapter
     }
 
     private fun initModel() {
@@ -74,7 +74,6 @@ class StocksListFragment : BaseFragment() {
             list.let {
 
                 viewBinding.loading = list?.isNullOrEmpty()
-
                 mAdapter.setData(ArrayList(it ?: listOf()))
                 mAdapter.notifyDataSetChanged()
             }
