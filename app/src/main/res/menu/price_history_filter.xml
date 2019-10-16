@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/range_select"
+        app:showAsAction="ifRoom|withText">
+        <menu>
+            <item
+                android:id="@+id/three_months"
+                android:title="@string/three_months" />
+
+            <item
+                android:id="@+id/six_months"
+                android:title="@string/six_months" />
+
+            <item
+                android:id="@+id/one_year"
+                android:title="@string/one_year" />
+
+            <item
+                android:id="@+id/three_year"
+                android:title="@string/three_year" />
+        </menu>
+    </item>
+</menu>

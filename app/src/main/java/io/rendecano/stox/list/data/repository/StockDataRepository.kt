@@ -50,8 +50,7 @@ class StockDataRepository @Inject constructor(
         //TODO: Implement cache timeout
         val cachedData = stockLocalSource.retrieveStockList()
         return if (cachedData.isEmpty()) {
-            stockRemoteSource.getStockList().take(20)
-                    .map { it.toStock() }
+            stockRemoteSource.getStockList().map { it.toStock() }
         } else {
             cachedData.map { it.toStock() }
         }
