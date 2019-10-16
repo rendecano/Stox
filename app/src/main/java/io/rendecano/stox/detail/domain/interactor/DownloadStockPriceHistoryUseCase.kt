@@ -7,22 +7,15 @@ import io.rendecano.stox.detail.domain.model.PriceRangeFilter
 import io.rendecano.stox.list.domain.repository.StockRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
 class DownloadStockPriceHistoryUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseUseCase<Int, DownloadStockPriceHistoryUseCase.Params>() {
 
     override suspend fun run(params: Params?): Either<Failure, Int> {
         return try {
-
-            // TODO: Format current date to get the price range
-            val dateFrom = when (params!!.priceRangeFilter) {
-                PriceRangeFilter.SEMI_ANNUAL -> "2019-04-15"
-                PriceRangeFilter.ANNUAL -> "2018-10-15"
-                PriceRangeFilter.THREE_YEARS -> "2016-10-15"
-                else -> "2019-07-15"
-            }
-
-            val dateTo = "2019-10-15"
+            val dateFrom = getDateString(params!!.priceRangeFilter)
+            val dateTo = getDateString(isToday = true)
 
             Either.Right(downloadStockPriceHistory(params.symbol, dateFrom, dateTo))
         } catch (exp: Exception) {
@@ -34,6 +27,28 @@ class DownloadStockPriceHistoryUseCase @Inject constructor(private val stockRepo
         val list = stockRepository.getHistoricalPrice(symbol, dateFrom, dateTo)
         stockRepository.saveHistoricalPriceList(symbol, list)
         list.size
+    }
+
+    private fun getDateString(priceRangeFilter: PriceRangeFilter = PriceRangeFilter.QUARTER, isToday: Boolean = false): String {
+        val now = Calendar.getInstance()
+
+        if (!isToday) {
+            when (priceRangeFilter) {
+                PriceRangeFilter.SEMI_ANNUAL -> now.add(Calendar.MONTH, -6)
+                PriceRangeFilter.ANNUAL -> now.add(Calendar.YEAR, -1)
+                PriceRangeFilter.THREE_YEARS -> now.add(Calendar.YEAR, -3)
+                else -> now.add(Calendar.MONTH, -3)
+            }
+        }
+
+        val year = now.get(Calendar.YEAR)
+        val monthOfYear = now.get(Calendar.MONTH)
+        val dayOfMonth = now.get(Calendar.DAY_OF_MONTH)
+
+        val month = if (monthOfYear + 1 > 9) "" + (monthOfYear + 1) else "0" + (monthOfYear + 1)
+        val day = if (dayOfMonth > 9) "" + dayOfMonth else "0$dayOfMonth"
+
+        return "$year-$month-$day"
     }
 
     data class Params(val symbol: String, val priceRangeFilter: PriceRangeFilter)
