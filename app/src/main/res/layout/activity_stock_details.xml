@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="stock"
+            type="io.rendecano.stox.list.domain.model.Stock" />
+
+        <import type="android.view.View" />
+
+        <import type="io.rendecano.stox.list.domain.model.Status" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        android:fitsSystemWindows="false"
+        tools:context=".MainActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/navBarBackground"
+            android:outlineProvider="none"
+            app:layout_constraintBottom_toTopOf="@id/layoutInfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:fontFamily="@font/hurme_bold"
+                android:text="@{stock.name}"
+                android:textAllCaps="true"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/txt_size_18" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutInfo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/grid_16"
+            android:layout_marginTop="@dimen/grid_8"
+            android:layout_marginEnd="@dimen/grid_16"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgCompany"
+                android:layout_width="116dp"
+                android:layout_height="116dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/layoutDetails"
+                app:layout_constraintTop_toTopOf="parent"
+                app:stockImageUrl="@{stock.imageUrl}" />
+
+            <LinearLayout
+                android:id="@+id/layoutDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/imgCompany"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/txtSymbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/hurme_bold"
+                    android:text="@{stock.symbol}"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/txt_size_28"
+                    tools:text="AAPL" />
+
+                <TextView
+                    android:id="@+id/txtPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/hurme"
+                    android:text="@{Double.toString(stock.price)}"
+                    android:textColor="@{stock.status == Status.GAIN ? @color/green : @color/red}"
+                    android:textSize="@dimen/txt_size_48"
+                    tools:text="230.26" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtPercentChange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/grid_8"
+                        android:background="@{stock.status == Status.GAIN ? @color/green : @color/red}"
+                        android:fontFamily="@font/hurme"
+                        android:padding="@dimen/grid_4"
+                        android:text="@{stock.changesPercentage}"
+                        android:textColor="@color/colorTextInverse"
+                        android:textSize="@dimen/txt_size_18"
+                        android:visibility="@{stock.changesPercentage.length() > 0 ? View.VISIBLE : View.GONE}"
+                        tools:text="(+0.06%)"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/txtPriceChange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/hurme"
+                        android:text="@{`(` + Double.toString(stock.priceChange) + `)`}"
+                        android:textColor="@{stock.status == Status.GAIN ? @color/green : @color/red}"
+                        android:textSize="@dimen/txt_size_18"
+                        tools:text="230.26" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Space
+                android:id="@+id/spaceDetails"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/grid_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutDetails" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                app:layout_constraintTop_toBottomOf="@+id/spaceDetails" />
+
+            <TextView
+                android:id="@+id/labelLastDividend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_16"
+                android:fontFamily="@font/hurme_bold"
+                android:text="Last dividend"
+                android:textSize="@dimen/txt_size_18"
+                app:layout_constraintTop_toBottomOf="@+id/chart" />
+
+            <TextView
+                android:id="@+id/txtLastDividend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_4"
+                android:fontFamily="@font/hurme"
+                android:text="@{stock.lastDividend}"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/txt_size_24"
+                app:layout_constraintTop_toBottomOf="@+id/labelLastDividend" />
+
+            <TextView
+                android:id="@+id/labelSector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_16"
+                android:fontFamily="@font/hurme_bold"
+                android:text="Sector"
+                android:textSize="@dimen/txt_size_18"
+                app:layout_constraintTop_toBottomOf="@+id/txtLastDividend" />
+
+            <TextView
+                android:id="@+id/txtSector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_4"
+                android:fontFamily="@font/hurme"
+                android:text="@{stock.sector}"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/txt_size_24"
+                app:layout_constraintTop_toBottomOf="@+id/labelSector" />
+
+            <TextView
+                android:id="@+id/labelIndustry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_16"
+                android:fontFamily="@font/hurme_bold"
+                android:text="Industry"
+                android:textSize="@dimen/txt_size_18"
+                app:layout_constraintTop_toBottomOf="@+id/txtSector" />
+
+            <TextView
+                android:id="@+id/txtIndustry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_4"
+                android:fontFamily="@font/hurme"
+                android:text="@{stock.industry}"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/txt_size_24"
+                app:layout_constraintTop_toBottomOf="@+id/labelIndustry" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

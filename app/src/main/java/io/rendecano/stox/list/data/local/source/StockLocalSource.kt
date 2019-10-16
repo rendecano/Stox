@@ -1,7 +1,7 @@
 package io.rendecano.stox.list.data.local.source
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
+import io.rendecano.stox.list.data.local.model.PriceHistoryEntity
 import io.rendecano.stox.list.data.local.model.StockEntity
 
 interface StockLocalSource {
@@ -19,4 +19,10 @@ interface StockLocalSource {
     fun retrieveStocksList(): LiveData<List<StockEntity>>
 
     fun retrieveFavoritesStockList(): List<StockEntity>
+
+    fun retrieveStock(symbol: String): LiveData<StockEntity>
+
+    suspend fun savePriceHistoryList(priceHistoryEntity: List<PriceHistoryEntity>)
+
+    fun retrievePriceHistory(symbol: String): LiveData<List<PriceHistoryEntity>>
 }

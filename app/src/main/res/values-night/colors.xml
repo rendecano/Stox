@@ -4,14 +4,11 @@
     <color name="colorPrimaryDark">#171717</color>
     <color name="colorAccent">#EAB122</color>
 
-    <color name="colorInactive">#000000</color>
+    <color name="colorInactive">#DDDCDC</color>
     <color name="colorDivider">#ECEBEB</color>
-    <color name="navBarBackground">#FFFFFF</color>
-    <color name="colorBackground">#FAF9F9</color>
-    <color name="colorText">#000000</color>
+    <color name="navBarBackground">#171717</color>
+    <color name="colorBackground">#0C0C0C</color>
+    <color name="colorText">#FFFFFF</color>
     <color name="colorTextInverse">#FFFFFF</color>
     <color name="colorShimmer">#BAB9B9</color>
-
-    <color name="green">#00E676</color>
-    <color name="red">#FF3D00</color>
 </resources>

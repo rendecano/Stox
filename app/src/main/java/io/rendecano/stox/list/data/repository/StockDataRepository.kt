@@ -2,9 +2,13 @@ package io.rendecano.stox.list.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import io.rendecano.stox.detail.domain.model.PriceHistory
+import io.rendecano.stox.list.data.local.model.PriceHistoryEntity
 import io.rendecano.stox.list.data.local.model.StockEntity
 import io.rendecano.stox.list.data.local.source.StockLocalSource
 import io.rendecano.stox.list.data.remote.model.CompanyProfile
+import io.rendecano.stox.list.data.remote.model.Historical
+import io.rendecano.stox.list.data.remote.model.Symbols
 import io.rendecano.stox.list.data.remote.source.StockRemoteSource
 import io.rendecano.stox.list.domain.model.Status
 import io.rendecano.stox.list.domain.model.Stock
@@ -25,7 +29,6 @@ class StockDataRepository @Inject constructor(
         } else {
             cachedStock.toStock()
         }
-
     }
 
     override suspend fun saveStockList(stockList: List<Stock>) =
@@ -47,12 +50,8 @@ class StockDataRepository @Inject constructor(
         //TODO: Implement cache timeout
         val cachedData = stockLocalSource.retrieveStockList()
         return if (cachedData.isEmpty()) {
-            stockRemoteSource.getStockList()
-                    .map {
-                        Stock(it.name,
-                                it.price,
-                                it.symbol)
-                    }
+            stockRemoteSource.getStockList().take(20)
+                    .map { it.toStock() }
         } else {
             cachedData.map { it.toStock() }
         }
@@ -61,7 +60,28 @@ class StockDataRepository @Inject constructor(
     override suspend fun getFavoriteStocksList(): List<Stock> =
             stockLocalSource.retrieveFavoritesStockList().map { it.toStock() }
 
+    override suspend fun getRealtimePrice(symbol: String): Stock =
+            stockRemoteSource.getRealtimePrice(symbol).toStock()
+
+    override suspend fun getHistoricalPrice(symbol: String, fromDate: String, toDate: String): List<PriceHistory> =
+            stockRemoteSource.getHistoricalPriceList(symbol, fromDate, toDate).map {
+                it.toPriceHistory()
+            }
+
+    override suspend fun saveHistoricalPriceList(symbol: String, priceHistoryList: List<PriceHistory>) =
+            stockLocalSource.savePriceHistoryList(priceHistoryList.map { it.toPriceHistoryEntity(symbol) })
+
+    override fun getStockDetails(symbol: String): LiveData<Stock> =
+            Transformations.map(stockLocalSource.retrieveStock(symbol), ::transform)
+
+    override fun getPriceHistory(symbol: String): LiveData<List<PriceHistory>> =
+            Transformations.map(stockLocalSource.retrievePriceHistory(symbol), ::transformPriceEntity)
+
     private fun transform(listEntity: List<StockEntity>) = listEntity.map { it.toStock() }
+
+    private fun transform(listEntity: StockEntity) = listEntity.toStock()
+
+    private fun transformPriceEntity(priceHistoryEntityList: List<PriceHistoryEntity>) = priceHistoryEntityList.map { it.toPriceHistory() }
 
     private fun StockEntity.toStock(): Stock =
             Stock(this.name,
@@ -109,5 +129,24 @@ class StockDataRepository @Inject constructor(
                     this.profile.sector,
                     false,
                     0)
+
+    private fun Symbols.toStock(): Stock =
+            Stock(this.name ?: "",
+                    this.price,
+                    this.symbol)
+
+    private fun PriceHistoryEntity.toPriceHistory() =
+            PriceHistory(this.label,
+                    this.date,
+                    this.price)
+
+    private fun PriceHistory.toPriceHistoryEntity(symbol: String) =
+            PriceHistoryEntity(symbol = symbol,
+                    price = this.price,
+                    label = this.label,
+                    date = this.date)
+
+    private fun Historical.toPriceHistory() =
+            PriceHistory(this.label, this.date, this.close)
 
 }

@@ -28,4 +28,7 @@ interface StockDao {
 
     @Query("Select * from StockEntity")
     fun getStocksList(): LiveData<List<StockEntity>>
+
+    @Query("Select * from StockEntity where symbol = :symbol")
+    fun getStockInfo(symbol: String): LiveData<StockEntity>
 }

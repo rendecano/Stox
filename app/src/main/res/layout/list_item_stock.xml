@@ -16,6 +16,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/colorBackground"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -25,6 +26,7 @@
             android:layout_marginTop="@dimen/grid_8"
             android:layout_marginEnd="@dimen/grid_8"
             android:layout_marginBottom="@dimen/grid_8"
+            android:background="@color/colorBackground"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txtPercentChange"
@@ -52,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/hurme_bold"
                     android:text="@{stock.symbol}"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorText"
                     android:textSize="@dimen/txt_size_18"
                     tools:text="AAPL" />
 

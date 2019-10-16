@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import io.rendecano.stox.StoxApplication
+import io.rendecano.stox.detail.di.StockDetailsModule
 import io.rendecano.stox.list.di.StockBindingModule
 import io.rendecano.stox.list.di.StockModule
 import javax.inject.Singleton
@@ -16,7 +17,8 @@ import javax.inject.Singleton
             (AppModule::class),
             (AppBindingModule::class),
             (StockModule::class),
-            (StockBindingModule::class)
+            (StockBindingModule::class),
+            (StockDetailsModule::class)
         ]
 )
 interface AppComponent {

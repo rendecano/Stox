@@ -21,21 +21,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorBackground">
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:fontFamily="@font/hurme"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/grid_16"
-            android:paddingEnd="@dimen/grid_16"
-            android:text="Stocks List"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/txt_size_32"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -45,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtEmptyLabel"

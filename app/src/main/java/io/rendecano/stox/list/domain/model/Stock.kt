@@ -5,7 +5,7 @@ enum class Status {
 }
 
 data class Stock(val name: String = "",
-                 val price: Double = 0.0,
+                 var price: Double = 0.0,
                  val symbol: String = "",
                  val imageUrl: String = "",
                  val lastDividend: String = "",

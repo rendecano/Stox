@@ -40,7 +40,7 @@ class DownloadStockListUseCase @Inject constructor(private val stockRepository: 
         list.size
     }
 
-    data class Params(val maxNumberOfFriends: Int)
+    class Params
 
     data class DownloadStockListUseCaseFailure(val error: Exception) : Failure.FeatureFailure(error)
 }

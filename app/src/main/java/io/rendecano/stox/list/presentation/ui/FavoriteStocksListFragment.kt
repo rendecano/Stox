@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.rendecano.stox.R
@@ -30,6 +31,16 @@ class FavoriteStocksListFragment : BaseFragment() {
         }
     }
 
+    private val selectListener by lazy {
+        object : StockListAdapter.OnSelectListener {
+            override fun onSelect(symbol: String) {
+                findNavController().navigate(
+                        R.id.action_favoriteStocksListFragment_to_stockDetailsActivity,
+                        Bundle().apply { putString("SYMBOL", symbol) })
+            }
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -37,6 +48,7 @@ class FavoriteStocksListFragment : BaseFragment() {
     ): View? {
         viewBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_stocks_list, container, false)
+        viewBinding.lifecycleOwner = this
         return viewBinding.root
     }
 
@@ -45,13 +57,11 @@ class FavoriteStocksListFragment : BaseFragment() {
 
         initModel()
 
-        mAdapter = StockListAdapter(this, favoriteListener)
+        mAdapter = StockListAdapter(this, favoriteListener, selectListener)
         val mLayoutManager = LinearLayoutManager(activity)
         recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = mLayoutManager
         recyclerView.adapter = mAdapter
-
-        viewBinding.txtTitle.text = "Favorites"
     }
 
     private fun initModel() {

@@ -34,6 +34,6 @@
         android:label="SettingsFragment" />
     <activity
         android:id="@+id/stockDetailsActivity"
-        android:name="io.rendecano.stox.detail.StockDetailsActivity"
+        android:name="io.rendecano.stox.detail.presentation.ui.StockDetailsActivity"
         android:label="StockDetailsActivity" />
 </navigation>

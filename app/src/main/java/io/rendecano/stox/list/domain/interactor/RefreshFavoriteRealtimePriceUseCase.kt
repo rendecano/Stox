@@ -3,13 +3,12 @@ package io.rendecano.stox.list.domain.interactor
 import io.rendecano.stox.common.domain.interactor.BaseCoroutineUseCase
 import io.rendecano.stox.common.domain.model.Either
 import io.rendecano.stox.common.domain.model.Failure
-import io.rendecano.stox.list.domain.model.Status
 import io.rendecano.stox.list.domain.repository.StockRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RefreshFavoriteStockListUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseCoroutineUseCase<Int, RefreshFavoriteStockListUseCase.Params>() {
+class RefreshFavoriteRealtimePriceUseCase @Inject constructor(private val stockRepository: StockRepository) : BaseCoroutineUseCase<Int, RefreshFavoriteRealtimePriceUseCase.Params>() {
 
     override suspend fun run(params: Params?): Either<Failure, Int> {
         return try {
@@ -23,18 +22,10 @@ class RefreshFavoriteStockListUseCase @Inject constructor(private val stockRepos
         val list = stockRepository.getFavoriteStocksList()
 
         // Download all items with empty percentage changes
-        list.forEach {
-            val stockProfile = stockRepository.getCompanyProfile(it.symbol, true)
-            stockProfile.apply {
-                status = when {
-                    stockProfile.changesPercentage.contains("+") -> Status.GAIN
-                    stockProfile.changesPercentage.contains("-") -> Status.LOSS
-                    else -> Status.NO_CHANGE
-                }
-                isFavorite = true
-            }
-
-            stockRepository.updateStock(stockProfile)
+        list.forEach { stock ->
+            val updatedStock = stockRepository.getRealtimePrice(stock.symbol)
+            stock.apply { price = updatedStock.price }
+            stockRepository.updateStock(stock)
         }
         list.size
     }

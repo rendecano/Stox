@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.rendecano.stox.common.domain.model.Failure
 import io.rendecano.stox.common.presentation.viewmodel.SingleLiveEvent
 import io.rendecano.stox.list.domain.interactor.GetFavoriteStockListUseCase
-import io.rendecano.stox.list.domain.interactor.RefreshFavoriteStockListUseCase
+import io.rendecano.stox.list.domain.interactor.RefreshFavoriteRealtimePriceUseCase
 import io.rendecano.stox.list.domain.interactor.SetStockFavoriteUseCase
 import io.rendecano.stox.list.domain.model.Stock
 import kotlinx.coroutines.channels.ticker
@@ -18,7 +18,7 @@ private const val REFRESH_TIME: Long = 15 * 1000
 
 class FavoritesStocksListViewModel @Inject constructor(private val getFavoriteStockListUseCase: GetFavoriteStockListUseCase,
                                                        private val setStockFavoriteUseCase: SetStockFavoriteUseCase,
-                                                       private val refreshFavoriteStockListUseCase: RefreshFavoriteStockListUseCase) : ViewModel() {
+                                                       private val refreshFavoriteRealtimePriceUseCase: RefreshFavoriteRealtimePriceUseCase) : ViewModel() {
 
     val error = SingleLiveEvent<String>()
     val favoriteStockList = MediatorLiveData<List<Stock>>()
@@ -51,7 +51,7 @@ class FavoritesStocksListViewModel @Inject constructor(private val getFavoriteSt
 
     private suspend fun startTimer() {
         for (event in tickerChannel) {
-            refreshFavoriteStockListUseCase.invoke(viewModelScope, RefreshFavoriteStockListUseCase.Params())
+            refreshFavoriteRealtimePriceUseCase.invoke(viewModelScope, RefreshFavoriteRealtimePriceUseCase.Params())
         }
     }
 

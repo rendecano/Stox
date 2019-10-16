@@ -1,5 +1,6 @@
 package io.rendecano.stox.common.presentation.ui
 
+import android.content.res.Resources
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -23,3 +24,5 @@ fun CircleImageView.bindImageUrl(imageUrl: String?) {
         this.setTag(R.id.imgCompany, null)
     }
 }
+
+fun Int.stringify(res: Resources) : String = res.getString(this)

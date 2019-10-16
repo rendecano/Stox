@@ -11,11 +11,16 @@ import io.rendecano.stox.databinding.ListItemStockBinding
 import io.rendecano.stox.list.domain.model.Stock
 
 class StockListAdapter(private val bindingLifecycleOwner: LifecycleOwner,
-                       private val favoriteListener: OnFavoriteListener) :
+                       private val favoriteListener: OnFavoriteListener,
+                       private val selectListener: OnSelectListener) :
         RecyclerView.Adapter<StockListAdapter.StockViewHolder>() {
 
     interface OnFavoriteListener {
         fun onSelect(symbol: String, selected: Boolean)
+    }
+
+    interface OnSelectListener {
+        fun onSelect(symbol: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockViewHolder {
@@ -34,6 +39,14 @@ class StockListAdapter(private val bindingLifecycleOwner: LifecycleOwner,
             if (view.isPressed) {
                 favoriteListener.onSelect(asyncDiffUtil.current()[position].symbol, isChecked)
             }
+        }
+
+        holder.binding.layoutInfo.setOnClickListener {
+            selectListener.onSelect(asyncDiffUtil.current()[position].symbol)
+        }
+
+        holder.binding.txtPercentChange.setOnClickListener {
+            selectListener.onSelect(asyncDiffUtil.current()[position].symbol)
         }
     }
 
