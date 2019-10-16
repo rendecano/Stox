@@ -10,7 +10,6 @@ An app to demonstrate MVVM + Android Architecture components with dark UI theme.
 
 # Architecture 
 MVVM 
-https://github.com/uber/RIBs/wiki
 
 # Language
 Kotlin
@@ -45,7 +44,6 @@ Financial Modeling
 - Cache timeout validation
 
 # Challenges encountered
-
 API not optimised
 	- Pagination could have helped
 	- Other info could have been returned on the initial API to make it lightweight
