@@ -27,8 +27,7 @@ class SetStockFavoriteUseCase @Inject constructor(private val stockRepository: S
 
         stockRepository.updateStock(stockProfile)
     }
-
-
+    
     data class Params(val symbol: String, val isFavorite: Boolean)
 
     data class SetStockFavoriteUseCaseFailure(val error: Exception) : Failure.FeatureFailure(error)
